@@ -25,20 +25,19 @@ class HomeController extends Controller
     {
         return view('home');
     }
-    public function showCart()
-    {
-        return view('cart');
-    }
+
     public function showProfile()
     {
         return view('profile');
     }
+
     public function showHistoryOrders()
     {
         return view('historyOrders');
     }
+
     public function showOrder($id)
     {
-        return view('order',compact('id'));
+        return view('order', compact('id'));
     }
 }
