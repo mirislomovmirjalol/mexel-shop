@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -41,4 +42,24 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function isAdmin()
+    {
+        if ($this->is_admin === 1) {
+            return true;
+        }
+        return false;
+    }
+
+    public function cartItemsCount()
+    {
+        $cart = Cart::where('user_id', $this->id)->first();
+        if (!is_null($cart)) {
+            $count = Cart_product::where('cart_id', $cart->id)->count();
+        } else {
+            $cartId = Cart::create(['user_id' => Auth::user()->id,]);
+            $count = 0;
+        }
+        return $count;
+    }
 }

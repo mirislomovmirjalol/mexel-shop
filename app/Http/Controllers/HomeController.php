@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\product;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,7 +24,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $bestProducts = product::orderBy('rate', 'desc')->limit(4)->get();
+        $newProducts = product::latest()->limit(4)->get();
+        return view('home', compact('bestProducts', 'newProducts'));
     }
 
     public function showProfile()
@@ -36,8 +39,18 @@ class HomeController extends Controller
         return view('historyOrders');
     }
 
-    public function showOrder($id)
+    public function search(Request $request)
     {
-        return view('order', compact('id'));
+        $searchTerm = $request->searchTerm;
+        if (!$searchTerm) {
+            return abort('404');
+        }
+        $items = product::query()->where('name',  'LIKE', "%{$searchTerm}%")->get();
+        if (!$items) {
+            $searchTerm = null;
+            $items = null;
+            return view('search', compact('items','searchTerm'));
+        }
+        return view('search', compact('items','searchTerm'));
     }
 }

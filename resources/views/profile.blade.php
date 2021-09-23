@@ -24,7 +24,7 @@
         </div>
         <div class="lg:w-1/2 md:w-full mx-auto flex flex-col bg-white shadow-sm mt-12 rounded">
 
-            <a href="" class="py-2 px-4 sm:px-6">
+            <a href="{{ route('activeOrders.show') }}" class="py-2 px-4 sm:px-6">
                 <p class="flex justify-start no-underline hover:no-underline text-gray-600"
                    id="slide-over-title">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"

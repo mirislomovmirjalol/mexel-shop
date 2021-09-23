@@ -95,8 +95,8 @@
                         </button>
                     </div>
 
-                    <div class="text-center pt-12 pb-12">
-                        <p>Do you have an account? <a href="{{ route('login') }}" class="underline font-semibold">Login
+                    <div class="text-center pt-4 pb-12">
+                        <p>Do you have an account? <a href="{{ route('login') }}" class="underline font-semibold text-red-600">Login
                                 here.</a></p>
                     </div>
                 </form>

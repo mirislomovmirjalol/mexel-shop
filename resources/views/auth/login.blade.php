@@ -61,8 +61,8 @@
                         </button>
                     </div>
 
-                    <div class="text-center pt-12 pb-12">
-                        <p>Don't have an account? <a href="{{ route('register') }}" class="underline font-semibold">Register
+                    <div class="text-center pt-4 pb-12">
+                        <p>Don't you have an account? <a href="{{ route('register') }}" class="underline font-semibold text-red-600">Register
                                 here.</a></p>
                     </div>
                 </form>

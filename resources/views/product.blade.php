@@ -37,7 +37,7 @@
                 </div>
                 <div class="flex items-center mt-6">
                     <button
-                        class="px-8 py-2 bg-gray-800 text-white text-sm font-medium rounded hover:bg-gray-400 focus:outline-none focus:bg-indigo-500">
+                        class="px-8 py-2 bg-gray-800 text-white text-sm font-medium rounded hover:bg-gray-400 focus:outline-none focus:bg-gray-500">
                         Order Now
                     </button>
                     <button class="mx-2 text-gray-800 border rounded-md p-2 hover:bg-gray-200 focus:outline-none">

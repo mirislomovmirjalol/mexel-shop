@@ -16,7 +16,7 @@ class CartController extends Controller
     {
         $cartId = Cart::where('user_id', Auth::user()->id)->first();
         if (!is_null($cartId)) {
-            $cart = Cart_product::where('cart_id', '=', $cartId->id)->first();
+            $cart = Cart_product::where('cart_id', '=', $cartId->id)->latest()->get();
         } else {
             $cartId = Cart::create(['user_id' => Auth::user()->id,]);
             $cart = false;
@@ -26,20 +26,24 @@ class CartController extends Controller
 
     public function addToCart($productId)
     {
-
         $product = Product::where('id', $productId)->first();
         if (!$product) {
             abort('404');
         }
+
+        $rate = $product->rate;
+        $rate += 0.2;
+        $product->rate = $rate;
+        $product->save();
+
         $cartId = Cart::where('user_id', Auth::user()->id)->first();
         if (is_null($cartId)) {
             $cart = Cart::create(['user_id' => Auth::user()->id,]);
             $cart_product = new Cart_product;
             $cart_product->cart_id = $cart->id;
             $cart_product->product_id = $productId;
-            $cart_product->save();
         } else {
-            $cart_product = Cart_product::where('product_id', $productId)->first();
+            $cart_product = Cart_product::where('cart_id', $cartId->id)->where('product_id', $productId)->first();
             if (is_null($cart_product)) {
                 $cart_product = new Cart_product;
                 $cart_product->cart_id = $cartId->id;
@@ -49,8 +53,8 @@ class CartController extends Controller
                 $count++;
                 $cart_product->count = $count;
             }
-            $cart_product->save();
         }
+        $cart_product->save();
         session()->flash('success', "Savatga $product->name qoshildi!");
         return redirect()->back();
     }
@@ -61,7 +65,8 @@ class CartController extends Controller
         if (!$product) {
             abort('404');
         }
-        $cart_product = Cart_product::where('product_id', $productId)->first();
+        $cartId = Cart::where('user_id', Auth::user()->id)->first();
+        $cart_product = Cart_product::where('cart_id', $cartId->id)->where('product_id', $productId)->first();
         if (isNull($cart_product)) {
             $count = $cart_product->count;
             if ($count > 1) {
@@ -83,7 +88,8 @@ class CartController extends Controller
         if (!$product) {
             abort('404');
         }
-        $cart_product = Cart_product::where('product_id', $productId)->first();
+        $cartId = Cart::where('user_id', Auth::user()->id)->first();
+        $cart_product = Cart_product::where('cart_id', $cartId->id)->where('product_id', $productId)->first();
         if (isNull($cart_product)) {
             $cart_product->delete();
         } else {
@@ -95,6 +101,11 @@ class CartController extends Controller
 
     public function address()
     {
-        return view('address');
+        $user = Auth::user();
+        if ($user->cartItemsCount()) {
+            return view('address');
+        }
+        session()->flash('danger', "Savatingizda hechnima yoq!");
+        return redirect()->back();
     }
 }

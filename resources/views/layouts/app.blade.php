@@ -92,8 +92,8 @@
             <nav>
                 <ul class="md:flex items-center justify-between text-base text-gray-700 pt-0 md:pt-0">
                     <li><a class="inline-block text-gray-600 hover:text-black hover:no-underline py-2 px-4"
-                           href="{{ route('category.index') }}">Category</a></li>
-                    <li><a class="inline-block text-gray-600 hover:text-black hover:no-underline py-2 px-4" href="#">About</a>
+                           href="{{ route('category.index') }}">Category
+                        </a>
                     </li>
                 </ul>
             </nav>
@@ -113,9 +113,18 @@
 
         <div class="order-2 md:order-3 flex items-center" id="nav-content">
 
+            <button type="button" onclick="openModal('searchModal')"
+                    class="inline-block no-underline text-gray-500 hover:text-black">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                          clip-rule="evenodd"/>
+                </svg>
+            </button>
+
             @if (Route::has('login'))
                 @auth
-                    <a class="inline-block no-underline text-gray-500 hover:text-black"
+                    <a class="ml-3 inline-block no-underline text-gray-500 hover:text-black"
                        href="{{ route('profile.show') }}">
                         <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                              viewBox="0 0 24 24">
@@ -125,8 +134,9 @@
                         </svg>
                     </a>
 
-                    <a class="pl-3 inline-block no-underline text-gray-500 hover:text-black"
+                    <a class="ml-3 inline-block no-underline text-gray-500 hover:text-black"
                        href="{{ route('cart.show') }}">
+                        <span class="relative inline-block">
                         <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                              viewBox="0 0 24 24">
                             <path
@@ -134,13 +144,22 @@
                             <circle cx="10.5" cy="18.5" r="1.5"/>
                             <circle cx="17.5" cy="18.5" r="1.5"/>
                         </svg>
+                            <span
+                                class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                                {{ \Illuminate\Support\Facades\Auth::user()->cartItemsCount() }}
+                            </span>
+                    </span>
+
                     </a>
                 @else
-                    <a href="{{ route('login') }}" class="text-gray-600 hover:text-black hover:no-underline">Log in</a>
-
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="ml-4 text-gray-600 hover:text-black hover:no-underline">Register</a>
-                    @endif
+                    <a href="{{ route('login') }}"
+                       class="ml-3 inline-block no-underline text-gray-500 hover:text-black">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                             stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                        </svg>
+                    </a>
                 @endauth
             @endif
 
@@ -170,7 +189,7 @@
     <div class="container transition-all" id="alert">
         <div class="lg:w-1/2 md:w-full shadow-xl top-4 left-1 right-1 mx-auto fixed z-50">
             <div class="relative py-3 pl-4 pr-10 leading-normal text-red-700 bg-red-100 rounded-lg" role="alert">
-                <p>{{ session()->get('warning') }}</p>
+                <p>{{ session()->get('danger') }}</p>
                 <button class="absolute inset-y-0 right-0 flex items-center mr-4" onclick="hideAlert()">
                     <svg class="w-4 h-4 fill-current" role="button" viewBox="0 0 20 20">
                         <path
@@ -215,6 +234,50 @@
     </div>
 </footer>
 
+{{--    Search Modal    --}}
+
+<div
+    class="min-w-screen px-2 hidden h-screen animated fadeIn faster fixed  left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover"
+    id="searchModal">
+    <div class="absolute bg-gray-600 bg-opacity-60 opacity-80 inset-0 z-0"></div>
+    <div
+        class="w-full  max-w-lg p-2 relative mx-auto my-auto rounded-xl shadow-lg  bg-white ">
+        <!--content-->
+        <form action="{{ route('search') }}" method="post">
+            <!--body-->
+            <div class="text-center p-5 flex-auto justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 flex items-center text-green-500 mx-auto"
+                     viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                          clip-rule="evenodd"/>
+                </svg>
+                <h2 class="text-xl font-bold py-4 ">Search</h2>
+                <input type="text"
+                       name="searchTerm"
+                       id="searchTerm"
+                       autocomplete="off"
+                       required
+                       class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm shadow-sm">
+            </div>
+            <!--modal footer-->
+            <div class="flex justify-around">
+                <button
+                    type="button"
+                    onclick="modalCancel('searchModal')"
+                    class="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100">
+                    Back
+                </button>
+                <button
+                    class="mb-2 md:mb-0 bg-green-500 border border-green-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-green-600">
+                    Search
+                </button>
+                @csrf
+            </div>
+        </form>
+    </div>
+</div>
+
 
 <script>
     var alert = document.getElementById("alert");
@@ -230,6 +293,16 @@
     setTimeout(function () {
         alert.style.display = "none";
     }, 5000);
+
+    function openModal(id) {
+        let modalId = document.getElementById(id)
+        modalId.classList.remove('hidden')
+    }
+
+    function modalCancel(id) {
+        let modalId = document.getElementById(id)
+        modalId.classList.add('hidden')
+    }
 </script>
 </body>
 </html>

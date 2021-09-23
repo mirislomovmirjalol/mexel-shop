@@ -17,7 +17,7 @@
 
                             @if($cart)
 
-                                @foreach($cart->get() as $product)
+                                @foreach($cart as $product)
                                     <li class="py-6 flex">
                                         <div
                                             class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
@@ -66,8 +66,9 @@
                                                 </div>
 
                                                 <div class="flex">
-                                                    <form action="{{ route('cart.remove', $product->products()->first()->id) }}"
-                                                          method="post">
+                                                    <form
+                                                        action="{{ route('cart.remove', $product->products()->first()->id) }}"
+                                                        method="post">
                                                         <button type="submit"
                                                                 class="font-medium text-red-600 hover:text-gray-400">
                                                             Remove
@@ -108,12 +109,14 @@
                         @else
                             0
                         @endif
-                    sum</p>
+                        sum</p>
                 </div>
-                <p class="mt-0.5 text-sm text-yellow-500">Taxing doesn't calculated at this price!</p>
+                <p class="mt-0.5 text-sm text-yellow-500">Delivery is not included in this price!</p>
                 <div class="mt-6">
-                    <a href="#"
-                       class="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-gray-800 hover:bg-gray-600">Checkout</a>
+                    <button type="button" onclick="confirmModal()"
+                            class="w-full px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-gray-800 hover:bg-gray-600">
+                        Checkout
+                    </button>
                 </div>
                 <div class="mt-6 flex justify-center text-sm text-center text-gray-500">
                     <p>
@@ -127,5 +130,58 @@
         </div>
     </div>
 
+
+    <div
+        class="min-w-screen px-2 hidden h-screen animated fadeIn faster  fixed  left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover"
+        id="confirmModal">
+        <div class="absolute bg-gray-600 bg-opacity-60 opacity-80 inset-0 z-0"></div>
+        <div
+            class="w-full  max-w-lg p-2 relative mx-auto my-auto rounded-xl shadow-lg  bg-white ">
+            <!--content-->
+            <div class="">
+                <!--body-->
+                <div class="text-center p-5 flex-auto justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="w-16 h-16 flex items-center text-green-400 mx-auto"
+                         viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                        <path fill-rule="evenodd"
+                              d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                              clip-rule="evenodd"/>
+                    </svg>
+                    <h2 class="text-xl font-bold py-4 ">Are you sure?</h2>
+                    <p class="text-sm  px-8 ">Please check your cart and make sure you added products all you need</p>
+                </div>
+                <!--modal footer-->
+                <div class="flex justify-around">
+                    <button
+                        type="button"
+                        onclick="cencelModal()"
+                        class="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100">
+                        Cancel
+                    </button>
+                    <form action="{{ route('cart.address') }}">
+                        <button
+                            type="submit"
+                            class="mb-2 md:mb-0 bg-green-400 border border-green-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-green-600">
+                            Next Step
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function confirmModal() {
+            let modalId = document.getElementById('confirmModal')
+            modalId.classList.remove('hidden')
+        }
+
+        function cencelModal() {
+            let modalId = document.getElementById('confirmModal')
+            modalId.classList.add('hidden')
+        }
+    </script>
 @endsection
 
