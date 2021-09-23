@@ -147,8 +147,7 @@ class OrderController extends Controller
 
     public function show($id)
     {
-        $userOrders = Order::where('user_id', Auth::user()->id);
-        $order = $userOrders->where('id', $id)->first();
+        $order = Order::where('id', $id)->first();
         if (!$order) {
             return abort('404');
         }
