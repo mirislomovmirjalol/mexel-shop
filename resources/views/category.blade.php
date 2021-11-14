@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <section class="bg-white pt-8 h-screen">
+    <section class="bg-white pt-8">
         <div class="container mx-auto flex items-center flex-wrap pt-4">
 
             <nav id="store" class="w-full z-30 top-0 px-6 py-1">
@@ -9,7 +9,7 @@
 
                     <a class="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl "
                        href="#">
-                        MORE
+                        {{ $category->name }}
                     </a>
 
                     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>

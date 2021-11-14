@@ -18,7 +18,14 @@ class ProductController extends Controller
             $product->rate = $rate;
             $product->save();
 
-            return view('product', compact('product'));
+            $moreProducts = product::query()
+                ->where('category_id', $product->category_id)
+                ->whereNotIn('id', [$product->id])
+                ->orderBy('rate', 'desc')
+                ->limit(8)
+                ->get();
+
+            return view('product', compact('product', 'moreProducts'));
         }
         return abort('404');
     }

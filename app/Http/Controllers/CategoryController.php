@@ -21,7 +21,7 @@ class CategoryController extends Controller
             $products = product::where("category_id", $id)->latest()->get();
 
             if ($products) {
-                return view('category', compact('products'));
+                return view('category', compact('products', 'category'));
             }
             return abort('404');
         }
@@ -60,7 +60,7 @@ class CategoryController extends Controller
     {
         $category = Category::where("id", $id)->first();
         if ($category) {
-            return view('admin.category.edit' , compact('category'));
+            return view('admin.category.edit', compact('category'));
         }
         return abort('404');
     }
@@ -72,7 +72,7 @@ class CategoryController extends Controller
                 "name" => "required",
             ]);
 
-        $category = Category::where('id' , $request->id)->first();
+        $category = Category::where('id', $request->id)->first();
         if (!$category) {
             return abort('404');
         }
